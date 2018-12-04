@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
+    <a input type="button" id="signup"href="/register" class="btn btn-primary">Register</a>
+
+</head>
+<body>
+
+<div id="login_frame">
+      <p id="image_logo"><img src="http://www.stormbowling.com/medias/Storm_Logo_Outline.png"height="80" width="160"></p>
+
+      <p>
+          <label for="loginusername" class="label_input">Email</label>
+          <input type="text" class="text_field" id="loginusername" placeholder="email">
+      </p>
+
+      <p><label for="loginpassword" class="label_input">Password</label>
+          <input type="password" class="text_field" id="loginpassword" placeholder="password"></p>
+
+
+        <div class="check">
+          <label>
+            <input type="checkbox" id="mycheck"> Remember your account
+          </label>
+        </div>
+    <br>
+      <div id="login_control">
+          <button type="button" class="btn btn-default" id="info_submit">Login</button>
+          <a id="forget_pwd" href="/forget_pwd">Forget your password?</a>
+      </div>
+
+
+
+</div>
+</body>
+</html>
+<script>
+  $(document).ready(function(){
+    //设置cookie
+      function setCookie(name,psw,idate){
+        var oDate = new Date();
+        oDate.setDate(oDate.getDate()+idate)
+        document.cookie = name+'='+psw+';expires'+idate;
+      }
+      //读取cookie
+      function getCookie(key){
+        var arr = document.cookie.split(';')
+        for(var i=0;i<arr.length;i++){
+          var arr2 = arr[i].split('=');
+          if(arr2[0]==key){
+            return arr2[1];
+          }
+        }
+        return '';
+      }
+     $('#loginusername').val(getCookie('username'));
+     $("#info_submit").click(function(){
+        var username=$('#loginusername').val();
+        var password=$('#loginpassword').val();
+        $.ajax({
+            type: "post",
+            url: "/",
+            dataType: "json",
+            data:{ username: username, password: password },
+            success: function(data){
+              console.log(data.data);
+              if(data){
+                  if(data.message==false){
+                    window.location.href="#";
+                    alert('account/password error')
+                  }else{
+                    alert('login success');
+                    window.location.href="/search";
+                    if($('#mycheck').prop('checked')==true){
+                      setCookie('username',username,7);
+
+                    }
+                  }
+              }
+            }
+        });
+    });
+  })
+</script>

@@ -1,0 +1,127 @@
+
+
+body::before {
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url('https://source.unsplash.com/2udGAJfhqfg/1600x900');
+    background-size: auto;
+    background-repeat: no-repeat;
+    opacity: .4;
+    content: "";
+    z-index: -1;
+}
+
+#signup{
+    font-size: 14px;
+    font-family:"Abril Fatface",cursive;
+
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    position:fixed;
+
+    top:20px;
+    right:30px;
+    color: white;
+    background-color: #6D7993;
+    border-radius: 2px;
+    border: 0;
+}
+#login_frame {
+    width: 400px;
+    height: 260px;
+    padding: 13px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -200px;
+
+    background-color: rgba(240, 255, 255, 0.5);
+
+    border-radius: 10px;
+    text-align: center;
+}
+
+form p > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#image_logo {
+    margin-top: 22px;
+}
+
+.label_input {
+    font-size: 14px;
+    font-family: "Abril Fatface",cursive;
+
+    width: 65px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+
+    color: white;
+    background-color: #6D7993;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.text_field {
+    width: 278px;
+    height: 28px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 0;
+}
+
+#info_submit {
+    font-size: 14px;
+    font-family:"Abril Fatface",cursive;
+
+    width: 120px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+
+    color: white;
+    background-color: #6D7993;
+    border-radius: 6px;
+    border: 0;
+
+    float: left;
+}
+
+#forget_pwd {
+    font-size: 12px;
+    color: #6D7993;
+    text-decoration: none;
+    position: relative;
+    float: right;
+    top: 5px;
+
+}
+
+#forget_pwd:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+#login_control {
+    padding: 0 28px;
+}
+.check{
+
+    font-size: 12px;
+    color: #6D7993;
+    text-decoration: none;
+    position: relative;
+    float: left;
+    left:25px;
+}

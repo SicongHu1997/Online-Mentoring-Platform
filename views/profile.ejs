@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/profile.css"/>
+</head>
+
+<body>
+<div class="titleLine">
+    <div><a type="button"  href="/search" class="myButton">Search</a></div>
+    <div class="homeb"><a type="button" href="/recentmessage"class="myButton">Recent message</a></div>
+
+    <div class="homec"> <a  type="button"  href="/" class="myButton">Log out</a></div>
+
+
+    <hr>
+</div>
+<div id="header">
+<div id="button">
+
+</div>
+<h1><%= name %>'s profile</h1>
+</div>
+
+<div id="nav">
+ <div id="photo">
+<img src="/images/<%= id %>.jpg" onerror="this.onerror=null;this.src='/images/default.jpg';" width="200px" height="200px"/><br>
+<a href="/chat/<%= id %>" class="button">Send Message</a>
+ </div>
+<h3>
+Name:&nbsp;&nbsp;<%=name %><br>
+Gender:&nbsp;&nbsp;<%= gender %><br>
+Age:&nbsp;&nbsp;<%= age %><br>
+Email:&nbsp;&nbsp;<%= email %><br>
+Address:&nbsp;&nbsp;<%= address %><br>
+Contact Number:&nbsp;&nbsp;<%= contact %><br>
+Would Like to learn:&nbsp;&nbsp;<%= skilllearn%><br>
+Would Like to teach:&nbsp;&nbsp;<%= skillteach%><br>
+Introduction:&nbsp;&nbsp;<%= intro %><br>
+Rating:&nbsp;&nbsp;<%= rating %>/5 (<%= ratnum %> ratings)<br>
+</h3>
+</div>
+
+<form role="form"
+action="/process" method="POST">
+    <input type="hidden" name="id" value="<%= id %>">
+    <label class="container">1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" value=1 name="rating">
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" value=2 name="rating">
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" checked="checked" value=3 name="rating">
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" value=4 name="rating">
+        <span class="checkmark"></span>
+    </label>
+     <label class="container">5
+        <input type="radio" value=5 name="rating">
+        <span class="checkmark"></span>
+     </label>
+<br><br>
+<button type="submit">Rate</button>
+</form>
+
+</body>
+</html>

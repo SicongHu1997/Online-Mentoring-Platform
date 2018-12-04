@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+</style>
+ <script language="javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+ <link rel="stylesheet" type="text/css" href="/stylesheets/recentchat.css"/>
+</head>
+
+<body>
+<div class="titleLine">
+ <div><a type="button"  href="/search" class="myButton">Search</a></div>
+ <div class="homeb"><a type="button" href="/editprofile"class="myButton">My Profile</a></div>
+
+ <div class="homec"> <a  type="button"  href="/" class="myButton">Log out</a></div>
+
+ <hr>
+</div>
+<div id="header">
+
+ <h1>Recent received messages</h1>
+</div>
+<div class="container">
+</div>
+<script type="text/javascript">
+    get_message();
+    setInterval(function(){get_message();}, 10000);
+    function get_message(){
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify({"myid":"<%= user %>"}),
+            contentType: 'application/json',
+            url: '/recchat',
+            success: function (data) {
+                $(".container").html("<div>");
+                for(i=0;i<data.length;i++){
+                    $(".container").append('<div class="message"onclick="location.href=\'chat/'+data[i].id+'\';"><img src="/images/'+data[i].id+'.jpg"onerror="this.onerror=null;this.src=\'/images/default.jpg\';"alt="Photo" style="width:100%;"><p>'+
+                        data[i].content+'</p><span class="time-right">'+data[i].time+'</span></div>');
+                }
+                $(".container").append("</div>");
+            }
+        });
+    }
+</script>
+</body>
+</html>

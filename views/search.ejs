@@ -1,0 +1,342 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="/assets/gmap3.js?body=1" type="text/javascript"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="stylesheets/search.css"/>
+    </head>
+    <body>
+    <div class="titleLine">
+        <div><a type="button"  href="/editprofile" class="myButton">My Profile</a></div>
+        <div class="homeb"><a type="button" href="/recentmessage"class="myButton">Recent message</a></div>
+        <div class="homec"> <a  type="button"  href="/" class="myButton">Log Out</a></div>
+        <hr>
+    </div>
+    <div class="title"><h2 href="/login">Neighbour-Pipeline</h2></div>
+      <div id="search">
+
+
+      <div class="row content">
+      <div class="col-sm-3 sidenav" id="role">
+        <form name="myform" id="search_input" action="/process_search" method="post" height=100px>
+        <div class="hello"><h3><br>Hello, <%=name%></h3></div>
+        <h4>Choose your role: </h4>
+        <select name="role" id="roleSelect" style="color:#FFFFFF;background-color:#6D7993;font-weight:bold;font-size:14pt;">
+        <option value="3" selected disabled>Please select here</option>
+        <option value="1">Mentor</option>
+        <option value="2">Mentee</option>
+        </select>
+        <div class="hello"></div>
+        <h4>Skills you want to teach/learn:</h4>
+          <input type="text" name="skill">
+		<div class="hello"></div>
+        <h4>Choose your location：</h4>
+      <select onchange="selectLocation()" id="userLocation" name="menu" style="color:#FFFFFF;background-color:#6D7993;font-weight:bold;font-size:14pt;">
+        <option value="3" selected disabled>Please select here</option>
+        <option value="0">Use current location</option>
+        <option value="1">Type in your location</option>
+      </select>
+
+      <div class="typeLocation" id="typeLocation" style="visibility: hidden;">
+          <div class="hello"></div>
+          <h4>Please type in your location here:</h4>
+          <div class="row">    
+             <div class="col-sm-2">
+              <input id="pac-input" class="controls" type="text" placeholder="Typing here...">
+            </div>
+          </div>
+      </div>
+      <input type="hidden" name="lat" id="lat">
+      <input type="hidden" name="lng" id="lng">
+
+
+		<!-- <h4>Type in your location</h4>
+          <input type="text" name="location" value="<%=address%>"> -->
+		<div class="hello"></div>
+		<h4>Distance Range(km): </h4>
+          <input type="text" name="range">
+    <div class="hello"></div>
+        <input type="submit" value="submit" class="myButton" >
+		</form> 
+      </div>
+
+      <div class="col-sm-9" id="mapcolumn">     
+        <div id="map"></div>
+        <div class="showall"> <a id="showallButton" href="/resultgrid" class="myButton">Show all</a> </div>
+      </div>
+    </div>
+      </div>
+
+        <div id="infowindow-content">
+         <h1 id="place-name"  class="title"></h1><br>
+         <span id="place-intro"></span><br>
+         <div class="hello"></div>
+         <a style="visibility: hidden;" id="place-button" href="#" class="myButton" onclick="removeMarker()"></a>
+        </div>
+    </body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcciXXZv1M9vOlclBjMmHoc3GmyVvFOmo&libraries=places&callback=initAutocomplete"
+         async defer></script>
+
+  </html>
+      <script>
+        var lat;
+        var lng;
+        var maker;
+        var allmarkers = [];
+        var address= JSON.parse('<%- JSON.stringify(address) %>');
+        if(address!= ""){
+          document.getElementById('pac-input').placeholder = address;
+        }
+        // initialize the map
+        function initAutocomplete() {
+
+          map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: {lat: -37.8136, lng: 144.9631},
+          mapTypeId: 'roadmap'
+          });
+
+        }
+
+          //choose your location
+          function selectLocation(){
+            d = document.getElementById("userLocation").value;
+            if(d=="1"){
+              document.getElementById("typeLocation").style.visibility="visible";
+              typeLocation();
+
+            }else{
+              currentLocation();
+              document.getElementById("typeLocation").style.visibility="hidden";
+            }
+          }
+
+          // get location from current location
+
+          function currentLocation(){
+            var infowindowUser = new google.maps.InfoWindow({
+
+                                          maxWidth: 250
+                                      });
+
+          // Try HTML5 geolocation.
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+              lat = position.coords.latitude;
+              lng = position.coords.longitude;
+
+
+              document.getElementById('lat').value = lat.toString();
+              document.getElementById('lng').value = lng.toString();
+
+
+            }, function() {
+
+              handleLocationError(true, infowindowUser, map.getCenter());
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infowindowUser, map.getCenter());
+          }
+
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+          infoWindow.setPosition(pos);
+          infoWindow.setContent(browserHasGeolocation ?
+                                'Error: The Geolocation service failed.' :
+                                'Error: Your browser doesn\'t support geolocation.');
+          infoWindow.open(map);
+        }
+
+
+        function typeLocation(){
+
+          var input = document.getElementById('pac-input');
+
+          var autocomplete = new google.maps.places.Autocomplete(
+            input, {placeIdOnly: true});
+          autocomplete.bindTo('bounds', map);
+
+          var geocoder = new google.maps.Geocoder;
+
+          autocomplete.addListener('place_changed', function() {
+
+            var place = autocomplete.getPlace();
+
+            if (!place.place_id) {
+              return;
+            }
+
+            geocoder.geocode({'placeId': place.place_id}, function(results, status) {
+
+              if (status !== 'OK') {
+                window.alert('Geocoder failed due to: ' + status);
+                return;
+              }
+
+            lat = results[0].geometry.location.lat();
+            lng = results[0].geometry.location.lng();
+            document.getElementById('lat').value = lat.toString();
+            document.getElementById('lng').value = lng.toString();
+          });
+
+        });
+        }
+
+        function removeMarker(){
+          marker.setMap(null);
+        }
+          function validateForm() {
+              var a = document.getElementById("roleSelect").value;
+              if(a ==3 || a == null || a == undefined){
+                alert("Please choose your role");
+                return false;
+              }
+              var x = document.forms["myform"]["skill"].value;
+              if (x == "") {
+                  alert("Please enter the skill you want to learn or teach");
+                  return false;
+              }
+              var b = document.getElementById("userLocation").value;
+              if(b == 3){
+                alert("Please select your location");
+                return false;
+              }else if(b == 1){
+                var y = document.getElementById("pac-input").value;
+                //alert(y);
+                if (y == null || y == undefined || y =="") {
+                  alert("Please enter your address");
+                  return false;
+              }
+              }
+
+
+              var z = document.forms["myform"]["range"].value;
+              if (z == "") {
+                  alert("Please enter your range");
+                  return false;
+              }
+              if (isNaN(z) || z<=0){
+                  alert("Range should be a number larger than 0");
+                  return false;
+              }
+              return true;
+          }
+
+
+          $(document).ready(function() {
+              var map = new google.maps.Map(document.getElementById('map'), {
+                  zoom: 12,
+                  center: {lat: -37.8136, lng: 144.9631}
+              });
+              bounds  = new google.maps.LatLngBounds();
+              $("#search_input").submit(function(e) {
+                  selectLocation();
+                  if(allmarkers.length!= 0){
+                    var l = allmarkers.length
+                    for (i = 0; i < l; i++) {
+                      allmarkers[i].setMap(null);
+
+                    }
+                  }
+
+                  var url = "/process_search"; // the script where you handle the form input.
+                  if(validateForm()) {
+                      $.ajax({
+                          type: "POST",
+                          url: url,
+                          data: $("#search_input").serialize(), // serializes the form's elements.
+                          success: function (data) {
+
+                              if (data.length > 0) {
+                                  var pos = {lat: data[0].lat, lng: data[0].lng};
+                                  var map = new google.maps.Map(document.getElementById('map'), {
+                                  zoom: 14,
+                                  center: pos
+                              });
+                                  marker = new google.maps.Marker({
+                                      position: pos,
+                                      map: map,
+                                      icon: "http://www.codeshare.co.uk/images/blue-pin.png"
+                                  });
+                                  allmarkers.push(marker);
+                                  var name= JSON.parse('<%- JSON.stringify(name) %>');
+                                  var contentString = '<div id="content">' +
+                                          '<div id="siteNotice">' +
+                                          '</div>' +
+                                          '<h1 id="firstHeading" class="firstHeading">' + name + '</h1>' +
+                                          '<div id="bodyContent">' +
+                                          '<p>' + name + '</p>' + '<a style="visibility: hidden;" id="place-button" href="#" class="myButton" onclick="removeMarker()"></a>' +
+                                          '</div>' +
+                                          '</div>';
+
+
+                                  var infowindowUser = new google.maps.InfoWindow({
+                                          content: contentString,
+                                          maxWidth: 250
+                                      });
+                                  infowindowUser.setPosition(pos);
+                                  if(document.getElementById("place-button")){
+                                    document.getElementById("place-button").style.visibility="visible";
+
+                                  }
+
+                                  marker.addListener('click', function() {
+                                    infowindowUser.open(map, marker);
+                                  });
+
+                                  infowindowUser.open(map,marker);
+
+                                  var
+                                  loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+                                  bounds.extend(loc);
+                                  for (i = 1; i < data.length; i++) {
+                                      var latlng = {lat: data[i].lat, lng: data[i].lng};
+                                      var mark = new google.maps.Marker({
+                                          position: latlng,
+                                          map: map
+                                      });
+                                      allmarkers.push(mark);
+                                      var contentString = '<div id="content">' +
+                                          '<div id="siteNotice">' +
+                                          '</div>' +
+                                          '<h1 id="firstHeading" class="firstHeading">' + data[i].name + '</h1>' +
+                                          '<div id="bodyContent">' +
+                                          '<p>' + data[i].address + '</p>' + '<a href="/profile/' + data[i].userid + '" class="myButton">View Detail and Chat</a>' +
+                                          '</div>' +
+                                          '</div>';
+                                      var infowindow = new google.maps.InfoWindow({
+                                          content: contentString,
+                                          maxWidth: 250
+                                      });
+                                      infowindow.open(map, mark);
+                                      marker.addListener('click', function() {
+                                      infowindowUser.open(map, mark);
+                                      });
+                                      loc = new google.maps.LatLng(mark.position.lat(), mark.position.lng());
+                                      bounds.extend(loc);
+                                  }
+                                  if(data.length>1){
+                                    map.fitBounds(bounds);
+                                    map.panToBounds(bounds);
+                                  }else{
+                                    alert("No match results!");
+                                    //map.fitBounds(loc);
+                                    map.setCenter(pos);
+
+                                  }
+
+                              }
+                          }
+                      });
+                  }
+                  e.preventDefault(); // avoid to execute the actual submit of the form.
+              })
+          });
+      </script>

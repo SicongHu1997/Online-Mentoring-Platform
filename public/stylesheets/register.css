@@ -1,0 +1,92 @@
+/*body {
+    background-image: url('https://source.unsplash.com/2udGAJfhqfg/1600x900');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}*/
+
+
+
+body::before {
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url('https://source.unsplash.com/2udGAJfhqfg/1600x900');
+    background-size: auto;
+    background-repeat: no-repeat;
+    opacity: .4;
+    content: "";
+    z-index: -1;
+}
+.label_input {
+
+    font-size: 14px;
+    font-family:  'Tajawal', sans-serif;
+
+    width: 65px;
+    height: 28px;
+    line-height: 25px;
+    text-align: center;
+
+    color: Black;
+    background-color: #D5D5D5;
+
+}
+#signUp_frame {
+    width: 400px;
+    height: 320px;
+    padding: 10px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -200px;
+
+    background-color: rgba(240, 255, 255, 0.5);
+
+    border-radius: 10px;
+    text-align: center;
+}
+h1{
+    font-size: 27px;
+    font-family:'Tajawal', sans-serif;
+    color:#96858F;
+}
+
+
+
+#login{
+    font-size: 14px;
+    font-family:"Abril Fatface",cursive;
+
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    position:fixed;
+
+    top:20px;
+    right:30px;
+    color: white;
+    background-color: #6D7993;
+    border-radius: 2px;
+    border: 0;
+}
+#login_submit{
+    font-size: 12px;
+    font-family:"Abril Fatface",cursive;
+
+    width: 80px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+
+    top:0;
+    color: white;
+    background-color: #6D7993;
+    border-radius: 2px;
+    border: 0;
+}

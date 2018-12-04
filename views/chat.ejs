@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <link href="/stylesheets/chat.css" rel="stylesheet" type="text/css" />
+ <script language="javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+
+<div class="titleLine">
+<div><a type="button"  href="/search" class="myButton">Search</a>
+ <a href="/profile/<%= id %>" class="myButton">the profile</a></div>
+<div class="homeb"><a type="button" href="/recentmessage"class="myButton">Recent message</a></div>
+
+<div class="homec"> <a  type="button"  href="/" class="myButton">Log out</a></div>
+
+</div>
+<div id="header">
+ <h1>My chat with <%= name %></h1>
+</div>
+<div class="container">
+</div>
+
+<div class="send_msg">
+<textarea placeholder="Enter text here...
+If You want to refresh page to receive new message, don't enter anything then click Send/Refresh button"
+          name="content" form="message"></textarea>
+<form role="form" action="/message" id="message" method="POST">
+ <input type="hidden" name="to" value="<%= id %>">
+ <input type="hidden" name="from" value="<%= user %>">
+ <button type="submit">Send/Refresh</button>
+</form>
+</div>
+<script type="text/javascript">
+        get_message();
+        setInterval(function () {
+            get_message();
+        }, 10000);
+
+        function get_message() {
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify({"from": "<%= user %>", "to": "<%= id %>"}),
+                contentType: 'application/json',
+                url: '/refreshchat',
+                success: function (data) {
+                    $(".container").html("<div>");
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i].type == "message") {
+                            $(".container").append('<div class="' + data[i].type + '"><img src="/images/<%= id %>.jpg" onerror="this.onerror=null;this.src=\'/images/default.jpg\';"alt="Photo" style="width:100%;"><p>' +
+                                data[i].content + '</p><span class="time-right">' + data[i].time + '</span></div>');
+                        }
+                        else {
+                            $(".container").append('<div class="message send"><img src="/images/<%= user %>.jpg" onerror="this.onerror=null;this.src=\'/images/default.jpg\';"alt="Photo" class="right" style="width:100%;"><p>' +
+                                data[i].content + '</p><span class="time-left">' + data[i].time + '</span></div>');
+                        }
+                    }
+                    $(".container").append("</div>");
+                }
+            });
+        }
+
+</script>
+</body>
+</html>

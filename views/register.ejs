@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>register</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/register.css"/>
+
+    <a input type="button" id="login" value="log in"href="/" class="btn btn-primary">Login</a>
+</head>
+<body>
+<div id="signUp_frame">
+    <h1>Sign Up</h1>
+    <form class="form-horizontal" id="signupForm">
+        <table style= "position:relative;margin:auto;">
+            <tr>
+                <td><label class="label_input">FirstName:</label> </td>
+                <td><input id="firstname" type="text" name="FisrtName"/></td>
+            </tr>
+            <tr><td><label class="label_input">LastName:</label></td>
+                <td><input id="lastname" type="text" name="LastName"/></td>
+            </tr>
+            <tr>
+                <td><label class="label_input">Gender:</label></td>
+                <td> <label class="label_input">Male</label>
+                    <input type="radio" value="1"  name="gender" checked="true" />
+                    <label class="label_input">Female</label>
+                    <input type="radio" value="2"  name="gender" /></td>
+            </tr>
+
+            <tr>
+                <td><label class="label_input">Age</label></td>
+                <td><input id="age" type="number" value=""/></td>
+            </tr>
+            <tr>
+                <td><label for="username" class="label_input">Email</label></td>
+                <td><input type="text" class="form-control" name="username" id="username" placeholder="email"></td>
+            </tr>
+
+            <tr>
+                <td><label for="password" class="label_input">Password</label></td>
+                <td><input type="password" class="form-control" name="password" id="password" placeholder="password"></td>
+            </tr>
+            <tr>
+                <td><label for="confirm_password" class="label_input">Enter your password again</label></td>
+                <td><input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Enter your password again"></td>
+            </tr>
+
+        </table>
+        <br>
+        <button type="button" class="btn btn-default" id="login_submit">Signup</button>
+
+
+    </form>
+</div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $("#signupForm").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 2
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: "#password"
+                },
+                agree:"required"
+            },
+            messages: {
+                username: {
+                    required: "Please enter your username",
+                    minlength:"at least two letter"
+                },
+                password: {
+                    required: "Please enter your password",
+                    minlength: "at five letters"
+                },
+                confirm_password: {
+                    required: "Please enter your password",
+                    minlength: "at least five letters",
+                    equalTo: "not match"
+                }
+            }
+        });
+
+        var radio = document.getElementsByName("gender");
+
+        $("#login_submit").click(function(){
+            var username=$('#username').val();
+            var password=$('#password').val();
+            var firstname=$('#firstname').val();
+            var lastname=$('#lastname').val();
+            for (i=0; i<radio.length; i++) {
+                if (radio[i].checked) {
+                    var gender=radio[i].value;
+                }
+            }
+
+            var age=$('#age').val();
+
+            $.ajax({
+                type: "post",
+                url: "/register",
+                dataType: "json",
+                data:{ username: username, password: password ,firstname:firstname,lastname:lastname,gender:gender,age:age},
+                success: function(data){
+                    //接受返回的数据，前端判断采取的动作
+                    console.log(data);
+                    if(data){
+                        if(data.message==false){
+                            alert('it exists');
+                            window.location.href="#";
+                        }else{
+                            alert('success!');
+                            window.location.href="/";
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>

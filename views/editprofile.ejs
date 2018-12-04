@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/edit.css" />
+</head>
+
+<body>
+<div class="titleLine">
+    <div><a type="button"  href="/search" class="myButton">Search</a></div>
+    <div class="homeb"><a type="button" href="/recentmessage"class="myButton">Recent message</a></div>
+
+    <div class="homec"> <a  type="button"  href="/" class="myButton">Log out</a></div>
+
+
+    <hr>
+</div>
+<div id="header">
+<div id="button">
+
+</div>
+<h1>Edit My Profile</h1>
+</div>
+<div id="container">
+<div id="photo">
+<img src="/images/<%= myid %>.jpg" onerror="this.onerror=null;this.src='/images/default.jpg';" width="200px" height="200px"/><br>
+</div>
+<div id="form">
+    <h3>
+    <form action="/edit" method="POST" enctype="multipart/form-data" >
+        <input type="hidden" name="myid" value="<%= myid %>">
+        Address:
+        <input type="text" name="address" value="<%= address%>">
+        <br>
+        Contact Number:
+        <input type="text" name="contact" value="<%= contact%>">
+        <br>
+		
+        Skills want to learn:
+        <input type="text" name="learn" value="<%= learn%>">
+        <br>
+        Skills want to teach:
+        <input type="text" name="teach" value="<%= teach%>">
+        <br>
+        My Inroduction:
+        <input type="text" name="intro" value="<%= intro%>">
+        <br>
+        <a input type="button" id="changepassword"href="/password" class="btn btn-primary">Change your password</a>
+        <br>
+        Upload my photo (jpg only, better upload square shaped image):
+        <input type="file" name="photo" accept="image/jpeg">
+        <br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    </h3>
+</div>
+</div>
+
+</body>
+</html>

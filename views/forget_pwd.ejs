@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>forget_pwd</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/forget_pwd.css"/>
+    <a input type="button" id="login" value="log in"href="/" class="btn btn-primary">Login</a>
+    <a input type="button" id="signup"href="/register" class="btn btn-primary">Register</a>
+
+</head>
+<body>
+<div id="forget_frame">
+    <label class="label_input" for="email">Your email:</label>
+    <input type="email" id="username" placeholder="Enter email">
+    <br>
+    <button type="button" class="btn btn-default" id="confirm">Confirm</button>
+    <p>We will send the link to your email for setting up your new password.</p>
+</div>
+
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        $("#confirm").click(function(){
+            var username=$('#username').val();
+            $.ajax({
+                type: "post",
+                url: "/forget_pwd",
+                dataType: "json",
+                data:{ username: username},
+                success: function(data){
+                    //接受返回的数据，前端判断采取的动作
+                    console.log(data);
+                    if(data){
+                        if(data.message==false){
+                            alert('it does not exist');
+                            //window.location.href="#";
+                        }else{
+                            alert('success!');
+                            //window.location.href="/send";
+                        }
+                    }
+                }
+            });
+        });
+    })
+</script>

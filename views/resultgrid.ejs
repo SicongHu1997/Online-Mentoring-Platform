@@ -1,0 +1,49 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="/stylesheets/resultgrid.css"/>
+    </head>
+    <body>
+    <div class="titleLine">
+      <div><a type="button"  href="/search" class="myButton">Search</a></div>
+      <div class="homeb"><a type="button" href="/recentmessage"class="myButton">Recent message</a></div>
+
+      <div class="homec"> <a  type="button"  href="/" class="myButton">Log out</a></div>
+
+
+    </div>
+      <div id="search">
+        <div class="title"><h2 href="/login">Neighbour-Pipeline</h2></div>
+        <div class="hello"></div>
+        <hr>
+        
+      <div class="row">
+
+          <% profiles.forEach(function(user){ %>
+          <div class="col-sm-4">
+          <div class="well">
+            <h1 id="firstHeading" class="firstHeading"><%= user.name %></h1>
+            <h3>Introduction</h3>
+            <p><%= user.intro %></p>
+            <p><b>Address: </b><%= user.address %></p>
+            <p><b>Contact: </b><%= user.contact %></p>
+            <p><b>Would like to learn: </b><%= user.skilllearn %></p>
+            <p><b>Would like to teach: </b><%= user.skillteach %></p>
+            <a href="/profile/<%= user.userid%>" class="myButton">View Detail to Chat</a>
+          </div>
+        </div>
+          <% }) %>
+      </div>
+    </div>
+      <script>
+
+      </script>
+      
+    </body>
+  </html>
+        
